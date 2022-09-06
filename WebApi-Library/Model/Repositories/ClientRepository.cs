@@ -12,10 +12,17 @@ namespace WebApi_Library.Repositories
         {
             _context = context;
         }
-        public void Delete(int id)
+        public bool Delete(int id)
         {
             var client = _context.Clients.SingleOrDefault(x => x.Id == id);
-            _context.Clients.Remove(client);
+
+            if (client == null)
+                return false;
+            else
+            {
+                _context.Clients.Remove(client);
+                return true;
+            }
         }
 
         public async Task<List<Client>> GetAllAsync()

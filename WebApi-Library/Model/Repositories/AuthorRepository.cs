@@ -14,10 +14,17 @@ namespace WebApi_Library.Repositories
             this._context = context;
         }
 
-        public void Delete(int id)
+        public bool Delete(int id)
         {
             var author = _context.Authors.SingleOrDefault(x => x.Id == id);
-            _context.Authors.Remove(author);
+
+            if (author == null)
+                return false;
+            else
+            {
+                _context.Authors.Remove(author);
+                return true;
+            }
         }
 
         public async Task<List<Author>> GetAllAsync()

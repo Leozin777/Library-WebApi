@@ -5,117 +5,116 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace WebApi_Library.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class MapsProntos : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Authors",
+                name: "author",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false)
+                    name = table.Column<string>(type: "VARCHAR", maxLength: 80, nullable: false),
+                    description = table.Column<string>(type: "VARCHAR", maxLength: 500, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Authors", x => x.Id);
+                    table.PrimaryKey("PK_author", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Clients",
+                name: "clients",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "VARCHAR", maxLength: 80, nullable: false),
                     Cpf = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false)
+                    phoneNumber = table.Column<string>(type: "VARCHAR", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clients", x => x.Id);
+                    table.PrimaryKey("PK_clients", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Requests",
+                name: "requests",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ClientId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Requests", x => x.Id);
+                    table.PrimaryKey("PK_requests", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Requests_Clients_ClientId",
+                        name: "FK_Requests_Client",
                         column: x => x.ClientId,
-                        principalTable: "Clients",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "clients",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "books",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Genre = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "VARCHAR", maxLength: 80, nullable: false),
+                    genre = table.Column<string>(type: "VARCHAR", maxLength: 30, nullable: false),
+                    description = table.Column<string>(type: "VARCHAR", maxLength: 500, nullable: false),
                     RequestId = table.Column<int>(type: "integer", nullable: false),
                     AuthorId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_books", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Books_Authors_AuthorId",
+                        name: "FK_Books_Author",
                         column: x => x.AuthorId,
-                        principalTable: "Authors",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "author",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Books_Requests_RequestId",
+                        name: "FK_books_requests_RequestId",
                         column: x => x.RequestId,
-                        principalTable: "Requests",
-                        principalColumn: "Id",
+                        principalTable: "requests",
+                        principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_AuthorId",
-                table: "Books",
+                name: "IX_books_AuthorId",
+                table: "books",
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Books_RequestId",
-                table: "Books",
+                name: "IX_books_RequestId",
+                table: "books",
                 column: "RequestId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requests_ClientId",
-                table: "Requests",
+                name: "IX_requests_ClientId",
+                table: "requests",
                 column: "ClientId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "books");
 
             migrationBuilder.DropTable(
-                name: "Authors");
+                name: "author");
 
             migrationBuilder.DropTable(
-                name: "Requests");
+                name: "requests");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "clients");
         }
     }
 }

@@ -38,10 +38,6 @@ namespace WebApi_Library.Data.Types
                 .HasConstraintName("FK_Books_Author")
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(x => x.Request)
-                .WithMany(x => x.)
-                .HasConstraintName("FK_Requests_Client")
-                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
